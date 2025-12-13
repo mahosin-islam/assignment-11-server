@@ -67,6 +67,12 @@ async function run() {
       const result = await trackCollection.insertOne(TrackingInfo);
       res.send(result);
     });
+    app.get("/my-tracking/:id",async(req,res)=>{
+      const id =req.params.id;
+        
+      const result =await trackCollection.find({trackingId:id}).toArray();
+      res.send(result);
+    })
 
     //user related-api
     app.post("/user", async (req, res) => {
@@ -254,11 +260,11 @@ async function run() {
     //order-for approved
     app.patch("/order-Approved/:id", async (req, res) => {
       const id = req.params.id;
-      const { status } = req.body;
+      const { statu } = req.body;
       const query = { _id: new ObjectId(id) };
       const update = {
         $set: {
-          status: status,
+          status: statu,
         },
       };
       const result = await orderCollection.updateOne(query, update);
@@ -268,11 +274,11 @@ async function run() {
 
     app.patch("/order-Rejected/:id", async (req, res) => {
       const id = req.params.id;
-      const { status } = req.body;
+      const { statu } = req.body;
       const query = { _id: new ObjectId(id) };
       const update = {
         $set: {
-          status: status,
+          status: statu,
         },
       };
       const result = await orderCollection.updateOne(query, update);
@@ -300,6 +306,14 @@ async function run() {
       const result = await orderCollection.find(query, option).toArray();
       res.send(result);
     });
+
+app.delete("/Cancel-order/:id",async(req,res)=>{
+  const id=req.params.id;
+  const query ={_id:new ObjectId(id)};
+  const result =await orderCollection.deleteOne(query);
+  res.send(result)
+})
+
 
     // product review collecin
     app.post("/review", async (req, res) => {
