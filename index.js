@@ -312,8 +312,7 @@ async function run() {
       if (searchText) {
         // query.name  = {$regex:searchText, $options: "i"};
         query.$or = [
-          { Status: { $regex: searchText, $options: "i" } },
-          { FirstName: { $regex: searchText, $options: "i" } },
+          { status: { $regex: searchText, $options: "i" } },
         ];
       }
       const option = { sort: { createdAt: -1 } };
