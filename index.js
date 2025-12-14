@@ -67,12 +67,12 @@ async function run() {
       const result = await trackCollection.insertOne(TrackingInfo);
       res.send(result);
     });
-    app.get("/my-tracking/:id",async(req,res)=>{
-      const id =req.params.id;
-        
-      const result =await trackCollection.find({trackingId:id}).toArray();
+    app.get("/my-tracking/:id", async (req, res) => {
+      const id = req.params.id;
+
+      const result = await trackCollection.find({ trackingId: id }).toArray();
       res.send(result);
-    })
+    });
 
     //user related-api
     app.post("/user", async (req, res) => {
@@ -195,6 +195,20 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/All-pagination", async (req, res) => {
+      try {
+        const {limit=0,skip=0}=req.query;
+        const result = await productCollection.find()
+        .skip(Number(skip))
+        .limit(Number(limit))
+        .toArray();
+        const count =await productCollection.countDocuments();
+        res.send({result,total:count});
+      } catch (err) {
+        res.status(400).json({ josin: "you hve wornd" });
+      }
+    });
+
     //sespent-collecotn
     app.post("/suspen/:id", async (req, res) => {
       const bode = req.body;
@@ -307,13 +321,20 @@ async function run() {
       res.send(result);
     });
 
-app.delete("/Cancel-order/:id",async(req,res)=>{
-  const id=req.params.id;
-  const query ={_id:new ObjectId(id)};
-  const result =await orderCollection.deleteOne(query);
-  res.send(result)
-})
+    ///delete product from my-persel router
+    app.delete("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await productCollection.deleteOne(query);
+      res.send(result);
+    });
 
+    app.delete("/Cancel-order/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await orderCollection.deleteOne(query);
+      res.send(result);
+    });
 
     // product review collecin
     app.post("/review", async (req, res) => {
