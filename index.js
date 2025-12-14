@@ -140,14 +140,14 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/product/:id", async (req, res) => {
+    app.get("/product/:id",varifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await productCollection.findOne(query);
       res.send(result);
     });
 
-    app.get("/manager-product", async (req, res) => {
+    app.get("/manager-product",varifyToken, async (req, res) => {
       const email = req.query.email;
       const search = req.query.search || "";
 
@@ -164,7 +164,7 @@ async function run() {
       res.send(result);
     });
 
-    app.delete("/Delet-prodcut/:id", async (req, res) => {
+    app.delete("/Delet-prodcut/:id",varifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await productCollection.deleteOne(query);
@@ -240,12 +240,12 @@ async function run() {
       const result = await orderCollection.insertOne(query);
       res.send(result);
     });
-    app.get("/orders", async (req, res) => {
+    app.get("/orders",varifyToken, async (req, res) => {
       const query = req.body;
       const result = await orderCollection.find(query).toArray();
       res.send(result);
     });
-    app.get("/myorder-product", async (req, res) => {
+    app.get("/myorder-product",varifyToken, async (req, res) => {
       const email = req.query.email;
       const result = await orderCollection
         .find({ OrderEmail: email })
@@ -253,7 +253,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/manage-pending", async (req, res) => {
+    app.get("/manage-pending",varifyToken, async (req, res) => {
       const email = req.query.email;
       const { status } = req.query;
       const result = await orderCollection
@@ -262,7 +262,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/manage-Approved", async (req, res) => {
+    app.get("/manage-Approved",varifyToken, async (req, res) => {
       const email = req.query.email;
       const { status } = req.query;
       const result = await orderCollection
@@ -299,14 +299,14 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/order-dtail/:id", async (req, res) => {
+    app.get("/order-dtail/:id",varifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await orderCollection.findOne(query);
       res.send(result);
     });
 
-    app.get("/searc-orders", async (req, res) => {
+    app.get("/searc-orders",varifyToken, async (req, res) => {
       const searchText = req.query.searchText;
       const query = {};
       if (searchText) {
@@ -321,14 +321,14 @@ async function run() {
     });
 
     ///delete product from my-persel router
-    app.delete("/product/:id", async (req, res) => {
+    app.delete("/product/:id",varifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await productCollection.deleteOne(query);
       res.send(result);
     });
 
-    app.delete("/Cancel-order/:id", async (req, res) => {
+    app.delete("/Cancel-order/:id",varifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await orderCollection.deleteOne(query);
