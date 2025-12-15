@@ -269,7 +269,6 @@ async function run() {
         .toArray();
       res.send(result);
     });
-//order aprojkgjaf askfdjksas /////
 //order-for approved
     app.patch("/order-Approved/:id", async (req, res) => {
       const id = req.params.id;
@@ -300,13 +299,6 @@ async function run() {
       res.send(result);
     });
 
-
-
-
-
-
-
-////////////////
 ///pproddasf secin//////////////
 
 
