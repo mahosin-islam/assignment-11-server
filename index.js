@@ -225,7 +225,7 @@ async function run() {
       res.send(result);
     });
 
-    //order-collecton
+    //order-collecton ss
     app.post("/orders", async (req, res) => {
       const query = req.body;
       const { ProductId, OrderQuantite } = query;
