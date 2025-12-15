@@ -296,9 +296,6 @@ async function run() {
       res.send(result);
     });
 
-///pproddasf secin//////////////
-
-
     app.get("/order-dtail/:id",varifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
