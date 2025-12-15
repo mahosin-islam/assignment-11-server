@@ -30,7 +30,7 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   },
 });
-// veryfyTooken funtion
+// veryfyTooken funtion 
 
 const varifyToken = async (req, res, next) => {
   const token = req.headers.authorization;
@@ -270,7 +270,7 @@ async function run() {
       res.send(result);
     });
 //order-for approved
-    app.patch("/order-Approved/:id", async (req, res) => {
+    app.patch("/order-Approved/:id",varifyToken, async (req, res) => {
       const id = req.params.id;
       const { status } = req.body;
       console.log('sta',status)
@@ -283,10 +283,7 @@ async function run() {
       const result = await orderCollection.updateOne(query, update);
       res.send(result);
     });
-
-
-
-     app.patch("/order-Rejected/:id", async (req, res) => {
+     app.patch("/order-Rejected/:id",varifyToken, async (req, res) => {
       const id = req.params.id;
       const { status } = req.body;
       const query = { _id: new ObjectId(id) };
