@@ -240,7 +240,7 @@ async function run() {
       const result = await orderCollection.insertOne(query);
       res.send(result);
     });
-    app.get("/orders",varifyToken, async (req, res) => {
+    app.get("/orders", async (req, res) => {
       const query = req.body;
       const result = await orderCollection.find(query).toArray();
       res.send(result);
@@ -253,7 +253,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/manage-pending",varifyToken, async (req, res) => {
+    app.get("/manage-pending", async (req, res) => {
       const email = req.query.email;
       const { status } = req.query;
       const result = await orderCollection
@@ -262,42 +262,53 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/manage-Approved",varifyToken, async (req, res) => {
-      const email = req.query.email;
-      const { status } = req.query;
+    app.get("/manage-Approved", async (req, res) => {
+      const { status,email } = req.query;
       const result = await orderCollection
         .find({ cratorEmail: email, status: status })
         .toArray();
       res.send(result);
     });
-
-    //order-for approved
+//order aprojkgjaf askfdjksas /////
+//order-for approved
     app.patch("/order-Approved/:id", async (req, res) => {
       const id = req.params.id;
-      const { statu } = req.body;
+      const { status } = req.body;
+      console.log('sta',status)
       const query = { _id: new ObjectId(id) };
       const update = {
         $set: {
-          status: statu,
+          status:status,
         },
       };
       const result = await orderCollection.updateOne(query, update);
       res.send(result);
     });
-    // order-for Reject
 
-    app.patch("/order-Rejected/:id", async (req, res) => {
+
+
+     app.patch("/order-Rejected/:id", async (req, res) => {
       const id = req.params.id;
-      const { statu } = req.body;
+      const { status } = req.body;
       const query = { _id: new ObjectId(id) };
       const update = {
         $set: {
-          status: statu,
+          status: status,
         },
       };
       const result = await orderCollection.updateOne(query, update);
       res.send(result);
     });
+
+
+
+
+
+
+
+////////////////
+///pproddasf secin//////////////
+
 
     app.get("/order-dtail/:id",varifyToken, async (req, res) => {
       const id = req.params.id;
