@@ -445,7 +445,7 @@ async function run() {
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
   } finally {
-    // await client.close(); commit fordeploy ---3
+    // await client.close(); commit fordeploy ----3
   }
 }
 run().catch(console.dir);
