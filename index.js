@@ -84,12 +84,12 @@ async function run() {
       const result = await userCollection.insertOne(req.body);
       res.send(result);
     });
-    app.get("/user", async (req, res) => {
+    app.get("/user",varifyToken, async (req, res) => {
       const requer = req.body;
       const result = await userCollection.find(requer).toArray();
       res.send(result);
     });
-    app.get("/user-role", async (req, res) => {
+    app.get("/user-role",varifyToken, async (req, res) => {
       const email = req.query.email;
       const result = await userCollection.findOne({ Email: email });
       res.send(result);
