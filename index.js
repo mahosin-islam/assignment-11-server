@@ -30,7 +30,7 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   },
 });
-// veryfyTooken funtion 
+// veryfyTooken funtion
 
 const varifyToken = async (req, res, next) => {
   const token = req.headers.authorization;
@@ -84,12 +84,12 @@ async function run() {
       const result = await userCollection.insertOne(req.body);
       res.send(result);
     });
-    app.get("/user",varifyToken, async (req, res) => {
+    app.get("/user", varifyToken, async (req, res) => {
       const requer = req.body;
       const result = await userCollection.find(requer).toArray();
       res.send(result);
     });
-    app.get("/user-role",varifyToken, async (req, res) => {
+    app.get("/user-role", async (req, res) => {
       const email = req.query.email;
       const result = await userCollection.findOne({ Email: email });
       res.send(result);
@@ -135,19 +135,19 @@ async function run() {
       const Homepage = HomepageConver === "true";
       const result = await productCollection
         .find({ Homepage })
-        .limit(6)
+        .limit(10)
         .toArray();
       res.send(result);
     });
 
-    app.get("/product/:id",varifyToken, async (req, res) => {
+    app.get("/product/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await productCollection.findOne(query);
       res.send(result);
     });
 
-    app.get("/manager-product",varifyToken, async (req, res) => {
+    app.get("/manager-product", varifyToken, async (req, res) => {
       const email = req.query.email;
       const search = req.query.search || "";
 
@@ -164,7 +164,7 @@ async function run() {
       res.send(result);
     });
 
-    app.delete("/Delet-prodcut/:id",varifyToken, async (req, res) => {
+    app.delete("/Delet-prodcut/:id", varifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await productCollection.deleteOne(query);
@@ -196,14 +196,22 @@ async function run() {
     });
 
     app.get("/All-pagination", async (req, res) => {
+      const search = req.query.search || "";
+   
       try {
-        const {limit=0,skip=0}=req.query;
-        const result = await productCollection.find()
-        .skip(Number(skip))
-        .limit(Number(limit))
-        .toArray();
-        const count =await productCollection.countDocuments();
-        res.send({result,total:count});
+        const query = {
+          $or: [
+            { ProductName: { $regex: search, $options: "i" } },
+          ],
+        };
+        const { limit = 0, skip = 0 } = req.query;
+        const result = await productCollection
+          .find(query)
+          .skip(Number(skip))
+          .limit(Number(limit))
+          .toArray();
+        const count = await productCollection.countDocuments();
+        res.send({ result, total: count });
       } catch (err) {
         res.status(400).json({ josin: "you hve wornd" });
       }
@@ -245,7 +253,7 @@ async function run() {
       const result = await orderCollection.find(query).toArray();
       res.send(result);
     });
-    app.get("/myorder-product",varifyToken, async (req, res) => {
+    app.get("/myorder-product", varifyToken, async (req, res) => {
       const email = req.query.email;
       const result = await orderCollection
         .find({ OrderEmail: email })
@@ -263,27 +271,27 @@ async function run() {
     });
 
     app.get("/manage-Approved", async (req, res) => {
-      const { status,email } = req.query;
+      const { status, email } = req.query;
       const result = await orderCollection
         .find({ cratorEmail: email, status: status })
         .toArray();
       res.send(result);
     });
-//order-for approved
-    app.patch("/order-Approved/:id",varifyToken, async (req, res) => {
+    //order-for approved
+    app.patch("/order-Approved/:id", varifyToken, async (req, res) => {
       const id = req.params.id;
       const { status } = req.body;
-      console.log('sta',status)
+      console.log("sta", status);
       const query = { _id: new ObjectId(id) };
       const update = {
         $set: {
-          status:status,
+          status: status,
         },
       };
       const result = await orderCollection.updateOne(query, update);
       res.send(result);
     });
-     app.patch("/order-Rejected/:id",varifyToken, async (req, res) => {
+    app.patch("/order-Rejected/:id", varifyToken, async (req, res) => {
       const id = req.params.id;
       const { status } = req.body;
       const query = { _id: new ObjectId(id) };
@@ -296,21 +304,19 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/order-dtail/:id",varifyToken, async (req, res) => {
+    app.get("/order-dtail/:id", varifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await orderCollection.findOne(query);
       res.send(result);
     });
 
-    app.get("/searc-orders",varifyToken, async (req, res) => {
+    app.get("/searc-orders", varifyToken, async (req, res) => {
       const searchText = req.query.searchText;
       const query = {};
       if (searchText) {
         // query.name  = {$regex:searchText, $options: "i"};
-        query.$or = [
-          { status: { $regex: searchText, $options: "i" } },
-        ];
+        query.$or = [{ status: { $regex: searchText, $options: "i" } }];
       }
       const option = { sort: { createdAt: -1 } };
       const result = await orderCollection.find(query, option).toArray();
@@ -318,14 +324,14 @@ async function run() {
     });
 
     ///delete product from my-persel router
-    app.delete("/product/:id",varifyToken, async (req, res) => {
+    app.delete("/product/:id", varifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await productCollection.deleteOne(query);
       res.send(result);
     });
 
-    app.delete("/Cancel-order/:id",varifyToken, async (req, res) => {
+    app.delete("/Cancel-order/:id", varifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await orderCollection.deleteOne(query);
